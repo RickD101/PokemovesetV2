@@ -1,0 +1,18 @@
+{
+  "name": "pokemoveset",
+  "version": "1.0.0",
+  "description": "the Pokemon moveset generator backend",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "RickD",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "mongoose": "^5.9.19"
+  }
+}
