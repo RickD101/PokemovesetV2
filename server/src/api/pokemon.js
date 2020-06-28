@@ -5,6 +5,7 @@ const searchPokemon = async (name, gen)=>{
         // query external API
         const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`);
         const pokemon = response.data;
+        
         // map API data to custom object
         const currentPokemon = {
             name: pokemon.name,
@@ -43,7 +44,7 @@ const searchPokemon = async (name, gen)=>{
             });
         });
 
-        // 
+        // make additional API calls to include additional move data
         await Promise.all(currentPokemon.moves.map(async (move,index) =>{
             const res = await axios(move.ref);
             const moveData = res.data;
@@ -58,8 +59,9 @@ const searchPokemon = async (name, gen)=>{
         return currentPokemon;
     }
     catch(err){
-        console.log(err);
-        return {msg: err};
+        return {
+            err: err
+        };
     }
 }
 

@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const router = express.Router();
 const User = require('../models/User');
+const Moveset = require('../models/Moveset');
 
 // login status route
 router.get('/', (req,res)=>{
@@ -15,8 +16,15 @@ router.get('/', (req,res)=>{
 
 // login check middleware
 router.use((req,res,next)=>{
-    if (req.session.user && req.path !== '/logout'){
-        res.send({msg: req.session.user.username + ' is already logged in.'});
+    if (req.session.user){
+        if (req.path == '/logout' || req.path == '/delete'){
+            next();
+        }
+        else{
+            res.send({
+                msg: req.session.user.username + ' is already logged in.'
+            });
+        }
     }
     else{
         next();
@@ -37,15 +45,21 @@ router.post('/new', async (req,res)=>{
 
             // create user with encrypted password
             const newUser = await User.create(req.body);
-            res.send({msg: newUser.username + ' saved to database.'});
+            res.send({
+                msg: newUser.username + ' saved to database.'
+            });
         }
         else{
-            res.send({msg: findUsername.username + ' already exists.'});
+            res.send({
+                msg: findUsername.username + ' already exists. Please select a different username.'
+            });
         }
     }
     catch(err){
-        res.send({msg: 'bad request.'});
-        console.log(err);
+        res.status(400).send({
+            msg: 'bad request.',
+            err: err
+        });
     }
 });
 
@@ -53,26 +67,33 @@ router.post('/new', async (req,res)=>{
 router.post('/login', async (req,res)=>{
     try{
         const savedUser = await User.findOne({username: req.body.username});
-            // check if user exists in database
+        // check if user exists in database
         if (!savedUser){
-            res.status(404).send({msg: req.body.username + ' not found.'});
+            res.status(404).send({
+                msg: req.body.username + ' not found.'
+            });
         }
-
-            // compare request password with hashed DB password
-        if (await bcrypt.compare(req.body.password, savedUser.password)){
+        // compare request password with hashed DB password
+        else if (await bcrypt.compare(req.body.password, savedUser.password)){
             req.session.user = {
                 username: savedUser.username,
                 id: savedUser._id
             };
-            res.send({msg: savedUser.username + ' logged in.'});
+            res.send({
+                msg: savedUser.username + ' logged in.'
+            });
         }
         else{
-            res.status(404).send({msg: 'incorrect password.'});
+            res.status(404).send({
+                msg: 'Incorrect password.'
+            });
         }
     }
     catch(err){
-        res.send({msg: 'bad request.'});
-        console.log(err);
+        res.status(400).send({
+            msg: 'Bad request.',
+            err: err
+        });
     }
 });
 
@@ -81,11 +102,39 @@ router.get('/logout', (req,res)=>{
     if (req.session.user){
         const currentUser = req.session.user.username;
         req.session.destroy(()=>{
-            res.send({msg: currentUser + ' logged out.'});
+            res.send({
+                msg: currentUser + ' logged out.'
+            });
         });
     }
     else{
-        res.send({msg: 'already logged out.'});
+        res.send({
+            msg: 'Already logged out.'
+        });
+    }
+});
+
+// delete user route
+router.delete('/delete', async (req,res)=>{
+    try{
+        await Moveset.deleteMany({
+            owner: req.session.user.id
+        });
+        await User.findByIdAndDelete(
+            req.session.user.id
+        );
+        const username = req.session.user.username;
+        req.session.destroy(()=>{
+            res.send({
+                msg: username + ' and all associated movesets deleted.'
+            });
+        });
+    }
+    catch(err){
+        res.status(400).send({
+            msg: 'Bad request.',
+            err: err
+        });
     }
 });
 

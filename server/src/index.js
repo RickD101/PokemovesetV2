@@ -12,7 +12,7 @@ const app = express();
 // route inclusions
 const userRouter = require('./routes/userRoutes');
 const pokemonRouter = require('./routes/pokemonRoutes');
-/* const movesetRouter = require('./routes/movesetRoutes'); */
+const movesetRouter = require('./routes/movesetRoutes');
 
 // middleware
 app.use(express.json());        // middleware for JSON parsing     
@@ -25,7 +25,7 @@ app.use(session({               // session middleware
 // routes
 app.use('/user', userRouter);
 app.use('/pokemon', pokemonRouter);
-/* app.use('/movesets', movesetRouter); */
+app.use('/movesets', movesetRouter);
 
 // initialise backend server
 app.listen(port, () => console.log(`App listening at http://localhost:${port}`));
