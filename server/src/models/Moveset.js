@@ -17,11 +17,7 @@ const schema = new mongoose.Schema({
             learnAt: {
                 type: Number,
                 required: true
-            },
-            ref: {
-                type: String,
-                required: true
-            },
+            }
         },
         move2: {
             name: {
@@ -32,10 +28,7 @@ const schema = new mongoose.Schema({
             },
             learnAt: {
                 type: Number
-            },
-            ref: {
-                type: String
-            },
+            }
         },
         move3: {
             name: {
@@ -46,10 +39,7 @@ const schema = new mongoose.Schema({
             },
             learnAt: {
                 type: Number
-            },
-            ref: {
-                type: String
-            },
+            }
         },
         move4: {
             name: {
@@ -60,10 +50,7 @@ const schema = new mongoose.Schema({
             },
             learnAt: {
                 type: Number
-            },
-            ref: {
-                type: String
-            },
+            }
         }
     },
     pokemon: {

@@ -37,8 +37,7 @@ const searchPokemon = async (name, gen)=>{
                     currentPokemon.moves.push({
                         name: move.move.name,
                         learnMethod: details.move_learn_method.name,
-                        learnAt: details.level_learned_at,
-                        ref: move.move.url
+                        learnAt: details.level_learned_at
                     });
                 }
             });
@@ -46,7 +45,7 @@ const searchPokemon = async (name, gen)=>{
 
         // make additional API calls to include additional move data
         await Promise.all(currentPokemon.moves.map(async (move,index) =>{
-            const res = await axios(move.ref);
+            const res = await axios(`https://pokeapi.co/api/v2/move/${move.name}`);
             const moveData = res.data;
             currentPokemon.moves[index].type = moveData.type.name;
             currentPokemon.moves[index].category = moveData.damage_class.name;

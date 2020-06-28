@@ -39,7 +39,12 @@ router.post('/new', async (req,res)=>{
             username: req.body.username
         });
 
-        if (!findUsername){
+        if (!findUsername && req.body.password.length < 8){
+            res.send({
+                msg: 'Password must contain at least 8 characters.'
+            });
+        }
+        else if (!findUsername){
             // encrypt password using bcryptjs
             req.body.password = await bcrypt.hash(req.body.password, 10);
 
@@ -116,24 +121,31 @@ router.get('/logout', (req,res)=>{
 
 // delete user route
 router.delete('/delete', async (req,res)=>{
-    try{
-        await Moveset.deleteMany({
-            owner: req.session.user.id
-        });
-        await User.findByIdAndDelete(
-            req.session.user.id
-        );
-        const username = req.session.user.username;
-        req.session.destroy(()=>{
-            res.send({
-                msg: username + ' and all associated movesets deleted.'
+    if (req.session.user){
+        try{
+            await Moveset.deleteMany({
+                owner: req.session.user.id
             });
-        });
+            await User.findByIdAndDelete(
+                req.session.user.id
+            );
+            const username = req.session.user.username;
+            req.session.destroy(()=>{
+                res.send({
+                    msg: username + ' and all associated movesets deleted.'
+                });
+            });
+        }
+        catch(err){
+            res.status(400).send({
+                msg: 'Bad request.',
+                err: err
+            });
+        }
     }
-    catch(err){
-        res.status(400).send({
-            msg: 'Bad request.',
-            err: err
+    else{
+        res.send({
+            msg: 'Please login.'
         });
     }
 });

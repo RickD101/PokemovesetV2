@@ -51,6 +51,11 @@ router.get('/', async (req,res)=>{
                 });
             }
         }
+        else if (currentPokemon.name && !currentPokemon.moves[0]){
+            res.send({
+                msg: `${currentPokemon.name} did not exist in generation ${req.body.gen}`
+            });
+        }
         else if (currentPokemon.name){
             currentPokemon.generation = req.body.gen;
             res.send(currentPokemon);

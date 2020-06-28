@@ -74,9 +74,16 @@ router.patch('/update', async (req,res)=>{
             {new: true}
         );
         if (moveset){
-            res.send({
-                msg: `Updated moveset with ID: ${moveset._id}.`
-            });
+            if (moveset.name){
+                res.send({
+                    msg: `${moveset.name} updated.`
+                });
+            }
+            else{
+                res.send({
+                    msg: 'Moveset updated.'
+                });
+            }
         }
         else{
             res.send({
@@ -100,9 +107,16 @@ router.delete('/delete', async (req,res)=>{
             owner: req.session.user.id
         })
         if (moveset){
-            res.send({
-                msg: `Deleted moveset with ID: ${moveset._id}.`
-            });
+            if (moveset.name){
+                res.send({
+                    msg: `${moveset.name} deleted.`
+                });
+            }
+            else{
+                res.send({
+                    msg: 'Moveset deleted.'
+                });
+            }
         }
         else{
             res.send({
