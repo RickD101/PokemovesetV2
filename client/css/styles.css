@@ -13,7 +13,7 @@
 /*----------------------------------------------*/
 
 body {
-    background: #fffdd0;
+    background: white;
 }
 
 ul {
@@ -22,6 +22,7 @@ ul {
 
 .container {
     text-align: center;
+    margin-top: 64px;
 }
 
 .navbar-brand {
@@ -34,6 +35,33 @@ ul {
 
 .navbar-toggler {
     border-color: rgba(0,0,0,0.8)!important;
+}
+
+#loginDropButton, .dropdown-menu, .dropdown-divider {
+    background: lightgray;
+    border-color: black;
+}
+
+.dropdown-menu {
+    width: 300px;
+}
+
+.form-control, #loginButton {
+    border-color: black;
+}
+
+.alert {
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+}
+
+.profileButtonContainer {
+    text-align: center;
+}
+
+.profileButton {
+    width: 250px;
+    margin: 0.15rem 0.3rem;
 }
 
 /*.results-col {

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const API = require('../api/pokemon');
+const API = require('../api/pokeAPI');
 
 router.get('/', async (req,res)=>{
     if (req.body.name && req.body.gen){

@@ -7,10 +7,15 @@ const Moveset = require('../models/Moveset');
 // login status route
 router.get('/', (req,res)=>{
     if (req.session.user){
-        res.send(true);
+        res.send({
+            status: true,
+            username: req.session.user.username
+        });
     }
     else{
-        res.send(false);
+        res.send({
+            status: false
+        });
     }
 });
 
@@ -75,6 +80,7 @@ router.post('/login', async (req,res)=>{
         // check if user exists in database
         if (!savedUser){
             res.status(404).send({
+                status: false,
                 msg: req.body.username + ' not found.'
             });
         }
@@ -85,17 +91,20 @@ router.post('/login', async (req,res)=>{
                 id: savedUser._id
             };
             res.send({
+                status: true,
                 msg: savedUser.username + ' logged in.'
             });
         }
         else{
             res.status(404).send({
+                status: false,
                 msg: 'Incorrect password.'
             });
         }
     }
     catch(err){
         res.status(400).send({
+            status: false,
             msg: 'Bad request.',
             err: err
         });
@@ -119,7 +128,7 @@ router.get('/logout', (req,res)=>{
     }
 });
 
-// delete user route
+// delete user and associated data route
 router.delete('/delete', async (req,res)=>{
     if (req.session.user){
         try{

@@ -4,5 +4,6 @@
         "baseUri": "/api", //from where you want to proxy. 
         "proxyUri": "http://localhost:3000/" //the actual url.
     },
-    "liveServer.settings.root": "client/"
+    "liveServer.settings.root": "client/",
+    "liveServer.settings.port": 5500
 }

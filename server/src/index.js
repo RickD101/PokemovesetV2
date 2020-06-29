@@ -11,7 +11,7 @@ const app = express();
 
 // route inclusions
 const userRouter = require('./routes/userRoutes');
-const pokemonRouter = require('./routes/pokemonRoutes');
+const pokeAPIRouter = require('./routes/pokeAPIRoutes');
 const movesetRouter = require('./routes/movesetRoutes');
 
 // middleware
@@ -24,7 +24,7 @@ app.use(session({               // session middleware
 
 // routes
 app.use('/user', userRouter);
-app.use('/pokemon', pokemonRouter);
+app.use('/pokeAPI', pokeAPIRouter);
 app.use('/movesets', movesetRouter);
 
 // initialise backend server
