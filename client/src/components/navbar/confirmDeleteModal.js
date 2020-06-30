@@ -1,5 +1,5 @@
 import page from "//unpkg.com/page/page.mjs";
-import deleteUser from "../api/user/deleteUser.js";
+import deleteUser from "../../api/user/deleteUser.js";
 
 const confirmDeleteModal = async ()=>{
     $('#confirmDeleteModal').remove();

@@ -3,7 +3,8 @@ import page from "//unpkg.com/page/page.mjs";
 page.configure({window:window});
 
 // inclusions
-import navbar from "./components/navbar.js";
+import navbar from "./components/navbar/navbar.js";
+import searchBar from "./components/pokeAPI/searchBar.js";
 
 // page routes function
 const showPages = ()=>{
@@ -12,9 +13,7 @@ const showPages = ()=>{
         page.redirect('/search');
     });
 
-    page('/search', navbar, ()=>{
-
-    });
+    page('/search', navbar, searchBar);
 
     page({hashbang: true});
 }

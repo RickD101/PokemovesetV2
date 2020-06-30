@@ -1,4 +1,4 @@
-import newUser from "../api/user/newUser.js";
+import newUser from "../../api/user/newUser.js";
 
 const attemptSignup = async (formData)=>{
     if (formData.password1 === formData.password2){

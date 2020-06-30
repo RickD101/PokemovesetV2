@@ -1,6 +1,6 @@
-import getUserStatus from "../api/user/getUserStatus.js";
-import userLogin from "../api/user/userLogin.js";
-import userLogout from "../api/user/userLogout.js";
+import getUserStatus from "../../api/user/getUserStatus.js";
+import userLogin from "../../api/user/userLogin.js";
+import userLogout from "../../api/user/userLogout.js";
 import signupModal from "./signupModal.js";
 import confirmDeleteModal from "./confirmDeleteModal.js";
 
@@ -63,11 +63,15 @@ const appendLogin = ()=>{
 
 const appendProfile = async ()=>{
     const userLoggedIn = await getUserStatus();
-    $('#loginDropButton').text(`${userLoggedIn.username}'s Profile`);
+    $('#loginDropButton').text('Profile');
     $('.dropdown-menu').html(/*template*/`
+        <span class="dropdown-item dropdown-profile-title">
+            ${userLoggedIn.username}'s Profile
+        </span>
+        <div class="dropdown-divider"></div>
         <div class="profileButtonContainer">
             <a class="btn btn-primary profileButton" href="#" role="button">View movesets</a>
-            <button type="button" class="btn btn-dark profileButton" id="logout">Logout</button>
+            <button type="button" class="btn btn-secondary profileButton" id="logout">Logout</button>
             <button type="button" class="btn btn-danger profileButton" data-toggle="modal" data-target="#confirmDeleteModal">Delete profile</button>
         </div>
     `);

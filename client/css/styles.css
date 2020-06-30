@@ -22,7 +22,6 @@ ul {
 
 .container {
     text-align: center;
-    margin-top: 64px;
 }
 
 .navbar-brand {
@@ -43,7 +42,7 @@ ul {
 }
 
 #loginDropButton {
-    width: 150px;
+    width: 100px;
 }
 
 .dropdown-menu {
@@ -74,7 +73,7 @@ ul {
 
 .profileButton {
     width: 250px;
-    margin: 0.15rem 0.3rem;
+    margin: 0.5rem 0;
 }
 
 /*.results-col {
