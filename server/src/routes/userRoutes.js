@@ -46,6 +46,7 @@ router.post('/new', async (req,res)=>{
 
         if (!findUsername && req.body.password.length < 8){
             res.send({
+                status: false,
                 msg: 'Password must contain at least 8 characters.'
             });
         }
@@ -56,11 +57,13 @@ router.post('/new', async (req,res)=>{
             // create user with encrypted password
             const newUser = await User.create(req.body);
             res.send({
+                status: true,
                 msg: newUser.username + ' saved to database.'
             });
         }
         else{
             res.send({
+                status: false,
                 msg: findUsername.username + ' already exists. Please select a different username.'
             });
         }

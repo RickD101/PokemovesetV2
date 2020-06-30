@@ -1,6 +1,8 @@
 import getUserStatus from "../api/user/getUserStatus.js";
 import userLogin from "../api/user/userLogin.js";
 import userLogout from "../api/user/userLogout.js";
+import signupModal from "./signupModal.js";
+import confirmDeleteModal from "./confirmDeleteModal.js";
 
 const attemptLogin = async (formData)=>{
     const login = await userLogin(formData);
@@ -32,8 +34,19 @@ const appendLogin = ()=>{
             <button type="submit" class="btn btn-primary" id="loginButton">Sign in</button>
         </form>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="#">New around here? Sign up</a>
+        <button class="dropdown-item" data-toggle="modal" data-target="#signupModal" id="signupLink">
+            New around here? Sign up
+        </button>
     `);
+
+    $('#navbarDropdown').off();
+    $('#navbarDropdown').on('show.bs.dropdown', ()=>{
+        $('.alert').remove();
+        $('#username').val('');
+        $('#password').val('');
+    });
+
+    signupModal();
 
     $('#login-form').off();
     $('#login-form').on('submit', (event)=>{
@@ -55,15 +68,17 @@ const appendProfile = async ()=>{
         <div class="profileButtonContainer">
             <a class="btn btn-primary profileButton" href="#" role="button">View movesets</a>
             <button type="button" class="btn btn-dark profileButton" id="logout">Logout</button>
-            <button type="button" class="btn btn-danger profileButton" id="deleteProfile">Delete profile</button>
+            <button type="button" class="btn btn-danger profileButton" data-toggle="modal" data-target="#confirmDeleteModal">Delete profile</button>
         </div>
     `);
 
+    confirmDeleteModal();
+
     $('#logout').off();
-    $('#logout').on('click', (event)=>{
+    $('#logout').on('click', async (event)=>{
         event.preventDefault();
 
-        userLogout();
+        await userLogout();
         appendLogin();
     });
 }

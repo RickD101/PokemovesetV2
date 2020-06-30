@@ -38,8 +38,12 @@ ul {
 }
 
 #loginDropButton, .dropdown-menu, .dropdown-divider {
-    background: lightgray;
-    border-color: black;
+    background: whitesmoke;
+    border-color: lightgray;
+}
+
+#loginDropButton {
+    width: 150px;
 }
 
 .dropdown-menu {
@@ -47,7 +51,16 @@ ul {
 }
 
 .form-control, #loginButton {
-    border-color: black;
+    border-color: lightgray;
+}
+
+#signupLink:hover {
+    background-color: transparent;
+    color: blue;
+}
+
+#signupLink:active {
+    border: none;
 }
 
 .alert {
@@ -401,4 +414,23 @@ ul {
         height: 255px;
         width: 255px;
     }
+}
+
+/*----------bs-animation--------------------*/
+.dropdown .dropdown-menu {
+    -webkit-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    -ms-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    transition: all 0.4s;
+
+    max-height: 0;
+    display: block;
+    overflow: hidden;
+    opacity: 0;
+}
+
+.dropdown.show .dropdown-menu { /* For Bootstrap 4, use .dropdown.show instead of .dropdown.open */
+    max-height: 400px;
+    opacity: 1;
 }

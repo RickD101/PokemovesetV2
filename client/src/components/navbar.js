@@ -1,6 +1,7 @@
 import navbarDropdown from "./navbarDropdown.js";
 
 const navbar = (ctx, next)=>{
+    $('.fixed-top').children().remove();
     $('.fixed-top').append(/*template*/`
         <nav class="navbar navbar-expand-lg navbar-light bg-danger">
             <a class="navbar-brand" href="index.html">Pokémoveset</a>
@@ -16,7 +17,7 @@ const navbar = (ctx, next)=>{
                     </li>
                     <li class="dropdown ml-auto">
                         <div class="btn-group">
-                            <div class="dropdown">
+                            <div class="dropdown" id="navbarDropdown">
                                 <button class="btn btn-light dropdown-toggle" type="button" id="loginDropButton" data-toggle="dropdown">
 
                                 </button>
