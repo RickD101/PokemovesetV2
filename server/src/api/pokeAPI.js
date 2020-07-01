@@ -14,12 +14,12 @@ const searchPokemon = async (name, gen)=>{
                 dexNumber: pokemon.id,
                 type: [],
                 stats: {
-                    HP: pokemon.stats[5].base_stat,
-                    ATK: pokemon.stats[4].base_stat,
-                    DEF: pokemon.stats[3].base_stat,
-                    SAK: pokemon.stats[2].base_stat,
-                    SDF: pokemon.stats[1].base_stat,
-                    SPD: pokemon.stats[0].base_stat
+                    HP: pokemon.stats[0].base_stat,
+                    ATK: pokemon.stats[1].base_stat,
+                    DEF: pokemon.stats[2].base_stat,
+                    SAK: pokemon.stats[3].base_stat,
+                    SDF: pokemon.stats[4].base_stat,
+                    SPD: pokemon.stats[5].base_stat
                 }
             },
             moves: []
@@ -49,8 +49,18 @@ const searchPokemon = async (name, gen)=>{
             const moveData = res.data;
             currentPokemon.moves[index].type = moveData.type.name;
             currentPokemon.moves[index].category = moveData.damage_class.name;
-            currentPokemon.moves[index].power = moveData.power;
-            currentPokemon.moves[index].accuracy = moveData.accuracy;
+            if (moveData.power){
+                currentPokemon.moves[index].power = moveData.power;
+            }
+            else{
+                currentPokemon.moves[index].power = "-";
+            }
+            if (moveData.accuracy){
+                currentPokemon.moves[index].accuracy = moveData.accuracy;
+            }
+            else{
+                currentPokemon.moves[index].accuracy = "-";
+            }
             currentPokemon.moves[index].pp = moveData.pp;
             currentPokemon.moves[index].description = moveData.effect_entries[0].short_effect.replace('$effect_chance', moveData.effect_chance);
         }));

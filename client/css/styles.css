@@ -13,7 +13,7 @@
 /*----------------------------------------------*/
 
 body {
-    background: white;
+    background: #ffff99;
 }
 
 ul {
@@ -283,6 +283,14 @@ ul {
     border-bottom: solid black 2px;
 }
 
+.empty-move-message {
+    margin-top: 1rem;
+}
+
+.empty-move-message::first-letter {
+    text-transform: uppercase;
+}
+
 .move-title {
     text-transform: uppercase;
     font-weight: bold;
@@ -429,7 +437,13 @@ ul {
     opacity: 0;
 }
 
-.dropdown.show .dropdown-menu { /* For Bootstrap 4, use .dropdown.show instead of .dropdown.open */
+.dropdown.show .dropdown-menu {
     max-height: 400px;
     opacity: 1;
+}
+
+.loadinggif {
+   background: url('../assets/loading.svg') no-repeat right center;
+   background-size: 60px;
+   background-color: white;
 }

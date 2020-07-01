@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const API = require('../api/pokeAPI');
 
-router.get('/', async (req,res)=>{
+router.post('/', async (req,res)=>{
     if (req.body.name && req.body.gen){
         // tidy up searched pokemon name to suit API call
         req.body.name = req.body.name.replace(" ","-").toLowerCase();
@@ -40,29 +40,40 @@ router.get('/', async (req,res)=>{
         const currentPokemon = await API.searchPokemon(req.body.name, req.body.genName);
         if (currentPokemon.err){
             if (currentPokemon.err.message === "Request failed with status code 404"){
+                let name = req.body.name.charAt(0).toUpperCase() + req.body.name.slice(1);
+                name = name.replace("-", " ");
                 res.send({
-                    msg: `${req.body.name} not found.`
+                    status: false,
+                    msg: `${name} not found.`
                 });
             }
             else{
                 res.send({
+                    status: false,
                     msg: `External API error.`,
                     err: currentPokemon.err
                 });
             }
         }
         else if (currentPokemon.name && !currentPokemon.moves[0]){
+            let name = currentPokemon.name.charAt(0).toUpperCase() + currentPokemon.name.slice(1);
+            name = name.replace("-", " ");
             res.send({
-                msg: `${currentPokemon.name} did not exist in generation ${req.body.gen}`
+                status: false,
+                msg: `${name} did not exist in generation ${req.body.gen}.`
             });
         }
         else if (currentPokemon.name){
             currentPokemon.generation = req.body.gen;
-            res.send(currentPokemon);
+            res.send({
+                status: true,
+                pokemon: currentPokemon
+            });
         }
     }
     if (!req.body.name){
         res.send({
+            status: false,
             msg: 'Please input a Pokémon name or Pokédex number.'
         });
     }
