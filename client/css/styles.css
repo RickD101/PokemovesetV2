@@ -285,6 +285,7 @@ ul {
 
 .empty-move-message {
     margin-top: 1rem;
+    padding: 0 1rem;
 }
 
 .empty-move-message::first-letter {
@@ -329,6 +330,16 @@ ul {
     margin-bottom: 0;
     padding: 0.2rem;
     background: white;
+}
+
+.filter-form {
+    position: absolute;
+    top: 89px;
+    z-index: 1;
+    background: white;
+    padding-left: 0.5rem;
+    border-bottom: 1px solid black;
+    width: 100%;
 }
 
 .move-category-physical {
@@ -401,12 +412,19 @@ ul {
     .tab-pane {
         height: 506px;
         overflow-y: scroll;
-        padding: 0.5rem 0;
+        overflow-x: hidden;
+        padding: 0;
+        padding-top: 42px;
+        padding-bottom: 0.5rem;
     }
 
     .pokemon-sprite {
         height: 210px;
         width: 210px;
+    }
+
+    .filter-form {
+        width: 381px;
     }
 }
 
@@ -414,12 +432,19 @@ ul {
     .tab-pane {
         height: 551px;
         overflow-y: scroll;
-        padding: 0.5rem 0;
+        overflow-x: hidden;
+        padding: 0;
+        padding-top: 42px;
+        padding-bottom: 0.5rem;
     }
 
     .pokemon-sprite {
         height: 255px;
         width: 255px;
+    }
+
+    .filter-form {
+        width: 456px;
     }
 }
 

@@ -1,4 +1,5 @@
 import searchPokemon from "../../api/pokeAPI/searchPokemon.js";
+import { pokemonNames } from "../../consts.js";
 import page from "//unpkg.com/page/page.mjs";
 
 const attemptSearch = async (pokemonData)=>{
@@ -69,6 +70,12 @@ const searchBar = ()=>{
             </form>
         </div>
     `);
+
+    // add autocomplete fucntionality to searchbar
+    $('#searchBar').autocomplete({
+        maxShowItems: 5,
+        source: pokemonNames
+    });
     
     // add the event listeners for search form
     $('#searchForm').off();

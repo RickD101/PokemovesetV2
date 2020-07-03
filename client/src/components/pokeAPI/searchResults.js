@@ -1,3 +1,95 @@
+const movesFilter = (tabs, pokemon)=>{
+    for (let i=0; i<tabs.length; i++){
+        const moves = $(tabs[i]).children();
+        if (moves.length == 0){
+            $(tabs[i]).append(/*template*/`
+                <div class="empty-move-message">
+                    ${pokemon.name} learns no ${$(tabs[i]).attr('cat')} moves in generation ${pokemon.generation}.
+                </div>
+            `);
+        }
+        else{
+            $(tabs[i]).prepend(/*template*/`
+                <form class="filter-form" id="filter-form-${$(tabs[i]).attr('id')}">
+                    <div class="form-row">
+                        <div class="m-1" style="width: 35%;">
+                            <select class="form-control form-control-sm" id="filter-type-${$(tabs[i]).attr('id')}">
+                                <option>(all types)</option>
+                            </select>
+                        </div>
+                        <div class="m-1" style="width: 35%;">
+                            <select class="form-control form-control-sm" id="filter-cat-${$(tabs[i]).attr('id')}">
+                                <option>(all categories)</option>
+                            </select>
+                        </div>
+                        <div class="m-1">
+                            <button type="submit" class="btn btn-secondary btn-sm">Filter</button>
+                        </div>
+                    </div>
+                </form>
+            `);
+
+            const moveTypes = $(tabs[i]).find('.move-type');
+            let uniqueTypes = [];
+            for (let j=0; j<moveTypes.length; j++){
+                if (!uniqueTypes.includes($(moveTypes[j]).text())){
+                    uniqueTypes.push($(moveTypes[j]).text());
+                }
+            }
+            uniqueTypes.sort().forEach(type =>{
+                $(`#filter-type-${$(tabs[i]).attr('id')}`).append(/*template*/`
+                    <option>${type}</option>
+                `);
+            });
+
+            const moveCats = $(tabs[i]).find('.move-category');
+            let uniqueCats = [];
+            for (let j=0; j<moveCats.length; j++){
+                if (!uniqueCats.includes($(moveCats[j]).text())){
+                    uniqueCats.push($(moveCats[j]).text());
+                }
+            }
+            uniqueCats.sort().forEach(cat =>{
+                $(`#filter-cat-${$(tabs[i]).attr('id')}`).append(/*template*/`
+                    <option>${cat}</option>
+                `);
+            });
+
+            $(`#filter-form-${$(tabs[i]).attr('id')}`).off();
+            $(`#filter-form-${$(tabs[i]).attr('id')}`).on('submit',(event)=>{
+                event.preventDefault();
+
+                const selectedType = $(`#filter-type-${$(tabs[i]).attr('id')}`).val();
+                const selectedCat = $(`#filter-cat-${$(tabs[i]).attr('id')}`).val();
+                $(moves).hide();
+                $(tabs[i]).find('.empty-move-message').remove();
+                if (selectedType === '(all types)' && selectedCat === '(all categories)'){
+                    $(moves).show();
+                }
+                else if (selectedType === '(all types)'){
+                    $(tabs[i]).find(`[cat="${selectedCat}"]`).show();
+                }
+                else if (selectedCat === '(all categories)'){
+                    $(tabs[i]).find(`[typ="${selectedType}"]`).show();
+                }
+                else{
+                    let comboFilter = $(tabs[i]).find(`[typ="${selectedType}"][cat="${selectedCat}"]`);
+                    if (comboFilter.length){
+                        comboFilter.show();
+                    }
+                    else{
+                        $(tabs[i]).append(/*template*/`
+                            <div class="empty-move-message">
+                                ${pokemon.name} learns no ${selectedType} type ${selectedCat} moves in generation ${pokemon.generation}.
+                            </div>
+                        `);
+                    }
+                }
+            })
+        }
+    }
+}
+
 const renderPokemon = (pokemon)=>{
 
     // render the basic structure
@@ -52,22 +144,22 @@ const renderMoveList = (pokemon)=>{
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="nav-level-up" title="level up" role="tabpanel"></div>
-            <div class="tab-pane fade" id="nav-machine" title="TM or HM" role="tabpanel"></div>
-            <div class="tab-pane fade" id="nav-egg" title="egg" role="tabpanel"></div>
-            <div class="tab-pane fade" id="nav-tutor" title="tutor" role="tabpanel"></div>
+            <div class="tab-pane fade show active" id="nav-level-up" cat="level up" role="tabpanel"></div>
+            <div class="tab-pane fade" id="nav-machine" cat="TM or HM" role="tabpanel"></div>
+            <div class="tab-pane fade" id="nav-egg" cat="egg" role="tabpanel"></div>
+            <div class="tab-pane fade" id="nav-tutor" cat="tutor" role="tabpanel"></div>
         </div>
     `);
 
     pokemon.moves.forEach(move =>{
         let card = $(/*template*/`
-            <div class="card" move="${move.name}" style="width: 95%;"></div>
+            <div class="card" move="${move.name}" typ="${move.type}" cat="${move.category}" style="width: 95%;"></div>
         `);
         let cardBody = $(/*template*/`
             <div class="card-body">
                 <span class="move-title">${move.name.replace("-"," ")}</span>
-                <span class="pokemon-type pokemon-type-${move.type}">${move.type}</span>
-                <span class="pokemon-type move-category-${move.category}">${move.category}</span><br/>
+                <span class="pokemon-type move-type pokemon-type-${move.type}" >${move.type}</span>
+                <span class="pokemon-type move-category move-category-${move.category}">${move.category}</span><br/>
                 <ul class="list-group list-group-horizontal move-stats">
                     <li class="list-group-item flex-fill move-stat move-stat-mid"><b>PWR:</b> ${move.power}</li>
                     <li class="list-group-item flex-fill move-stat move-stat-mid"><b>ACC:</b> ${move.accuracy}</li>
@@ -102,15 +194,7 @@ const renderMoveList = (pokemon)=>{
     });
 
     let tabs = $('#nav-tabContent').children();
-    for (let i=0; i<tabs.length; i++){
-        if ($(tabs[i]).children().length == 0){
-            $(tabs[i]).append(/*template*/`
-                <div class="empty-move-message">
-                    ${pokemon.name} learns no ${$(tabs[i]).attr('title')} moves in generation ${pokemon.generation}.
-                </div>
-            `);
-        }
-    }
+    movesFilter(tabs, pokemon);
 }
 
 const searchResults = ()=>{
