@@ -5,18 +5,26 @@ const schema = new mongoose.Schema({
         type: String,
     },
     moves: {
-        move1: {
+        move0: {
             name: {
                 type: String,
-                required: true
             },
             learnMethod: {
                 type: String,
-                required: true
             },
             learnAt: {
                 type: Number,
-                required: true
+            }
+        },
+        move1: {
+            name: {
+                type: String
+            },
+            learnMethod: {
+                type: String
+            },
+            learnAt: {
+                type: Number
             }
         },
         move2: {
@@ -31,17 +39,6 @@ const schema = new mongoose.Schema({
             }
         },
         move3: {
-            name: {
-                type: String
-            },
-            learnMethod: {
-                type: String
-            },
-            learnAt: {
-                type: Number
-            }
-        },
-        move4: {
             name: {
                 type: String
             },

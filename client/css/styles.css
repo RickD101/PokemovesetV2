@@ -378,6 +378,7 @@ ul {
 }
 
 .moveset-box-title {
+    position: relative;
     text-transform: uppercase;
     font-weight: bold;
     font-size: 1rem;
@@ -404,6 +405,32 @@ ul {
 .moveset-box-move-type {
     font-size: 0.7rem;
     padding: 0.1rem;
+}
+
+.movebox-name {
+    width: 60%;
+    font-weight: bold;
+    margin: auto;
+    border: solid black 1px;
+}
+
+.movebox-save, .movebox-delete {
+    font-size: 1.3rem;
+    position: absolute;
+    top: 9px;
+}
+
+.movebox-save:hover, .movebox-delete:hover {
+    color: #0EBFE9;
+    cursor: pointer;
+}
+
+.movebox-save {
+    right: 32px;
+}
+
+.movebox-delete {
+    right: 7px;
 }
 
 /*----------Media-querys---------------------*/

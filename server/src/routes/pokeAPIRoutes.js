@@ -50,7 +50,7 @@ router.post('/', async (req,res)=>{
             else{
                 res.send({
                     status: false,
-                    msg: `External API error.`,
+                    msg: `External API error. Please try searching again.`,
                     err: currentPokemon.err
                 });
             }

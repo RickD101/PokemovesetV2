@@ -13,6 +13,7 @@ const attemptLogin = async (formData)=>{
         $('.alert').remove();
         $('#loginButton').after(/*template*/`
             <div class="alert alert-danger" role="alert">
+                <i class="fas fa-exclamation-circle"></i>
                 ${login.msg}
             </div>
         `);

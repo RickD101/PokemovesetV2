@@ -1,3 +1,5 @@
+import movesetsBox from "../moveset/movesetsBox.js";
+
 const movesFilter = (tabs, pokemon)=>{
     for (let i=0; i<tabs.length; i++){
         const moves = $(tabs[i]).children();
@@ -80,7 +82,7 @@ const movesFilter = (tabs, pokemon)=>{
                     else{
                         $(tabs[i]).append(/*template*/`
                             <div class="empty-move-message">
-                                ${pokemon.name} learns no ${selectedType} type ${selectedCat} moves in generation ${pokemon.generation}.
+                                ${pokemon.name} learns no ${selectedType} type ${selectedCat} moves by ${$(tabs[i]).attr('cat')} in generation ${pokemon.generation}.
                             </div>
                         `);
                     }
@@ -92,6 +94,11 @@ const movesFilter = (tabs, pokemon)=>{
 
 const renderPokemon = (pokemon)=>{
 
+    // link to placeholder image if no image is linked
+    if (!pokemon.spriteURL){
+        pokemon.spriteURL = '../../assets/icon.png';
+    }
+
     // render the basic structure
     $('#contentContainer').append(/*template*/`
         <div class="row d-flex justify-content-center" style="margin-top: 86px;">
@@ -100,7 +107,7 @@ const renderPokemon = (pokemon)=>{
             <div class="col-4 results-col d-flex flex-column" id="saved-col"></div>
         </div>
     `);
-    
+
     // render the info column
     $('#info-col').append(/*template*/`
         <img class="pokemon-sprite" src=${pokemon.spriteURL}>
@@ -110,12 +117,14 @@ const renderPokemon = (pokemon)=>{
         </div>
     `);
 
+    // render types
     pokemon.info.type.forEach(type =>{
         $('.pokemon-info-box').append(/*template*/`
             <span class="pokemon-type pokemon-type-${type}">${type}</span>
         `);
     });
 
+    // render the base stats
     $('#info-col').append(/*template*/`
         <div class="pokemon-stats">
             <div class="pokemon-stat-title">BASE STATS</div>
@@ -151,13 +160,13 @@ const renderMoveList = (pokemon)=>{
         </div>
     `);
 
-    pokemon.moves.forEach(move =>{
+    pokemon.moves.forEach((move,index) =>{
         let card = $(/*template*/`
-            <div class="card" move="${move.name}" typ="${move.type}" cat="${move.category}" style="width: 95%;"></div>
+            <div class="card" index="${index}" move="${move.name}" typ="${move.type}" cat="${move.category}" style="width: 95%;"></div>
         `);
         let cardBody = $(/*template*/`
             <div class="card-body">
-                <span class="move-title">${move.name.replace("-"," ")}</span>
+                <span class="move-title">${move.name.replace(/-/g," ")}</span>
                 <span class="pokemon-type move-type pokemon-type-${move.type}" >${move.type}</span>
                 <span class="pokemon-type move-category move-category-${move.category}">${move.category}</span><br/>
                 <ul class="list-group list-group-horizontal move-stats">
@@ -180,7 +189,7 @@ const renderMoveList = (pokemon)=>{
             helper: function(e){
                 return $(
                     `<div class="move-helper">
-                        <span class="move-title">${move.name}</span>
+                        <span class="move-title">${move.name.replace(/-/g," ")}</span>
                     </div>`
                 );
             },
@@ -203,6 +212,7 @@ const searchResults = ()=>{
 
     renderPokemon(pokemon);
     renderMoveList(pokemon);
+    movesetsBox(pokemon);
 }
 
 export default searchResults;

@@ -22,17 +22,20 @@ router.post('/new', async (req,res)=>{
         const moveset = await Moveset.create(req.body);
         if (moveset.name){
             res.send({
+                status: true,
                 msg: `${moveset.name} saved.`
             });
         }
         else{
             res.send({
+                status: true,
                 msg: 'Moveset saved.'
             });
         }
     }
     catch(err){
         res.status(400).send({
+            status: false,
             msg: 'Bad request.',
             err: err
         });

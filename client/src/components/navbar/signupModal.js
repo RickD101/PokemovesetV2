@@ -10,6 +10,7 @@ const attemptSignup = async (formData)=>{
             $('.alert').remove();
             $('#signupButton').after(/*template*/`
                 <div class="alert alert-success" role="alert">
+                    <i class="fas fa-check-circle"></i>
                     ${signup.msg} You may now log in above.
                 </div>
             `);
@@ -21,6 +22,7 @@ const attemptSignup = async (formData)=>{
             $('.alert').remove();
             $('#signupButton').after(/*template*/`
                 <div class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-circle"></i>
                     ${signup.msg}
                 </div>
             `);
@@ -30,6 +32,7 @@ const attemptSignup = async (formData)=>{
         $('.alert').remove();
         $('#signupButton').after(/*template*/`
             <div class="alert alert-danger" role="alert">
+                <i class="fas fa-exclamation-circle"></i>
                 Passwords do not match.
             </div>
         `);
