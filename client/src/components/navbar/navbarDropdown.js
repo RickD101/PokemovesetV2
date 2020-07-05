@@ -3,6 +3,7 @@ import userLogin from "../../api/user/userLogin.js";
 import userLogout from "../../api/user/userLogout.js";
 import signupModal from "./signupModal.js";
 import confirmDeleteModal from "./confirmDeleteModal.js";
+import page from "//unpkg.com/page/page.mjs";
 
 const attemptLogin = async (formData)=>{
     const login = await userLogin(formData);
@@ -71,7 +72,7 @@ const appendProfile = async ()=>{
         </span>
         <div class="dropdown-divider"></div>
         <div class="profileButtonContainer">
-            <a class="btn btn-primary profileButton" href="#" role="button">View movesets</a>
+            <a class="btn btn-primary profileButton" href="/movesets" role="button">View movesets</a>
             <button type="button" class="btn btn-secondary profileButton" id="logout">Logout</button>
             <button type="button" class="btn btn-danger profileButton" data-toggle="modal" data-target="#confirmDeleteModal">Delete profile</button>
         </div>
@@ -85,6 +86,7 @@ const appendProfile = async ()=>{
 
         await userLogout();
         appendLogin();
+        page.redirect('/search');
     });
 }
 

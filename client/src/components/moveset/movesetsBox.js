@@ -131,13 +131,25 @@ const saveMoveset = async (event, pokemon, movesets)=>{
         const movesetData = {moves:{}};
 
         movesetData.name = $(`#name${boxNumber}`).val();
-        movesetData.pokemon = pokemon.name;
+        movesetData.pokemon = {
+            name: pokemon.name,
+            spriteURL: pokemon.spriteURL,
+            dexNumber: pokemon.info.dexNumber,
+            type: pokemon.info.type,
+            stats: pokemon.info.stats
+        };
         movesetData.generation = pokemon.generation;
 
         moveset.forEach((move,index)=>{
             if (move.name){
                 movesetData.moves[`move${index}`] = {
                     name: move.name,
+                    type: move.type,
+                    category: move.category,
+                    power: move.power,
+                    accuracy: move.accuracy,
+                    pp: move.pp,
+                    description: move.description,
                     learnMethod: move.learnMethod,
                     learnAt: move.learnAt
                 }
@@ -165,7 +177,7 @@ const saveMove = (move, moveboxID, movesets)=>{
     let movePresent = false;
 
     // check if move already exists in set
-    movesets['moveset'+movesetIndex].forEach(moveInSet =>{
+    movesets['moveset'+movesetIndex].forEach((moveInSet,index) =>{
         if (move.name === moveInSet.name){
             movePresent = true;
         }
@@ -179,15 +191,16 @@ const saveMove = (move, moveboxID, movesets)=>{
     }
     else{
         $('#saved-col').popover('dispose');
-        $(`#${moveboxID}`).popover({
+        const presentMove = moveboxID.slice(0,8);
+        $(`#${presentMove}`).popover({
             content: "Move is already in set!",
             placement: "left",
             animation: true,
             trigger: "manual"
         });
-        $(`#${moveboxID}`).popover('show');
+        $(`#${presentMove}`).popover('show');
         setTimeout(() => {
-            $(`#${moveboxID}`).popover('hide');
+            $(`#${presentMove}`).popover('hide');
         }, 2000);
     }
 }
@@ -199,6 +212,22 @@ const renderSavedMove = (move, moveboxID)=>{
         <span class="moveset-box-move-type pokemon-type-${move.type}">${move.type}</span>
         <span class="moveset-box-move-type move-category-${move.category}">${move.category}</span>
     `);
+    $(`#${moveboxID}`).tooltip('dispose');
+    $(`#${moveboxID}`).removeAttr('data-toggle data-html data-placement title');
+    $(`#${moveboxID}`).attr({
+        "data-toggle": "tooltip",
+        "data-html": "true",
+        "data-placement": "left",
+        title: /*template*/`
+            <div><b>PWR:</b> ${move.power}</div>
+            <div><b>ACC:</b> ${move.accuracy}</div>
+            <div><b>PP:</b> ${move.pp}</div>
+            <div>${move.description}</div>
+        ` 
+    });
+    $(`#${moveboxID}`).tooltip({
+        delay: {"show": 500}
+    });
 }
 
 const movesetsBox = (pokemon)=>{

@@ -45,14 +45,14 @@ const searchBar = ()=>{
 
     // draw the pokemon search bar and button
     $('#contentContainer').append(/*template*/`
-        <div class="d-flex align-items-center justify-content-center" style="height: 100vh;">
-            <form id="searchForm" style="margin-top: 20px; text-align: center;">
+        <div class="d-flex align-items-center justify-content-center" style="height: 88vh;">
+            <form id="searchForm" style="margin-top: -100px; text-align: center;">
                 <h4>Enter a Pokémon by name or Pokédex number and select your desired generation.</h4>
                 <div class="form-row d-flex justify-content-center">
-                    <div class="m-1" style="width: 40vw;">
+                    <div class="m-1" style="width: 60%;">
                         <input type="text" class="form-control form-control-lg" placeholder="Search Pokémon..." id="searchBar" required>
                     </div>
-                    <div class="m-1" style="width: 12vw;">
+                    <div class="m-1" style="width: 24%;">
                         <select class="form-control form-control-lg" id="genSelect">
                             <option>Generation 1</option>
                             <option>Generation 2</option>

@@ -6,6 +6,7 @@ page.configure({window:window});
 import navbar from "./components/navbar/navbar.js";
 import searchBar from "./components/pokeAPI/searchBar.js";
 import searchResults from "./components/pokeAPI/searchResults.js";
+import browseMovesets from "./components/moveset/browseMovesets.js";
 
 // page routes function
 const showPages = ()=>{
@@ -17,6 +18,8 @@ const showPages = ()=>{
     page('/search', navbar, searchBar);
 
     page('/searchResults', navbar, searchResults);
+
+    page('/movesets', navbar, browseMovesets);
 
     page({hashbang: true});
 }

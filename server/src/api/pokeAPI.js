@@ -62,7 +62,7 @@ const searchPokemon = async (name, gen)=>{
                 currentPokemon.moves[index].accuracy = "-";
             }
             currentPokemon.moves[index].pp = moveData.pp;
-            currentPokemon.moves[index].description = moveData.effect_entries[0].short_effect.replace('$effect_chance', moveData.effect_chance);
+            currentPokemon.moves[index].description = moveData.effect_entries[0].short_effect.replace(/\$effect_chance/g, moveData.effect_chance);
         }));
 
         return currentPokemon;

@@ -50,11 +50,15 @@ router.get('/', async (req,res)=>{
         });
         if (!movesets[0]){
             res.send({
+                status: false,
                 msg: 'No movesets found.'
             });
         }
         else{
-            res.send(movesets);
+            res.send({
+                status: true,
+                movesets: movesets
+            });
         }
     }
     catch(err){

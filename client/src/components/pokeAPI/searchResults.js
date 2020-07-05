@@ -14,7 +14,7 @@ const movesFilter = (tabs, pokemon)=>{
             $(tabs[i]).prepend(/*template*/`
                 <form class="filter-form" id="filter-form-${$(tabs[i]).attr('id')}">
                     <div class="form-row">
-                        <div class="m-1" style="width: 35%;">
+                        <div class="m-1 ml-2" style="width: 35%;">
                             <select class="form-control form-control-sm" id="filter-type-${$(tabs[i]).attr('id')}">
                                 <option>(all types)</option>
                             </select>
@@ -101,7 +101,7 @@ const renderPokemon = (pokemon)=>{
 
     // render the basic structure
     $('#contentContainer').append(/*template*/`
-        <div class="row d-flex justify-content-center" style="margin-top: 86px;">
+        <div class="row d-flex justify-content-center">
             <div class="col-3 results-col" id="info-col"></div>
             <div class="col-5 results-col" id="move-col"></div>
             <div class="col-4 results-col d-flex flex-column" id="saved-col"></div>

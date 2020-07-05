@@ -9,6 +9,24 @@ const schema = new mongoose.Schema({
             name: {
                 type: String,
             },
+            type: {
+                type: String,
+            },
+            category: {
+                type: String,
+            },
+            power: {
+                type: String,
+            },
+            accuracy: {
+                type: String,
+            },
+            pp: {
+                type: String,
+            },
+            description: {
+                type: String,
+            },
             learnMethod: {
                 type: String,
             },
@@ -18,40 +36,94 @@ const schema = new mongoose.Schema({
         },
         move1: {
             name: {
-                type: String
+                type: String,
+            },
+            type: {
+                type: String,
+            },
+            category: {
+                type: String,
+            },
+            power: {
+                type: String,
+            },
+            accuracy: {
+                type: String,
+            },
+            pp: {
+                type: String,
+            },
+            description: {
+                type: String,
             },
             learnMethod: {
-                type: String
+                type: String,
             },
             learnAt: {
-                type: Number
+                type: Number,
             }
         },
         move2: {
             name: {
-                type: String
+                type: String,
+            },
+            type: {
+                type: String,
+            },
+            category: {
+                type: String,
+            },
+            power: {
+                type: String,
+            },
+            accuracy: {
+                type: String,
+            },
+            pp: {
+                type: String,
+            },
+            description: {
+                type: String,
             },
             learnMethod: {
-                type: String
+                type: String,
             },
             learnAt: {
-                type: Number
+                type: Number,
             }
         },
         move3: {
             name: {
-                type: String
+                type: String,
+            },
+            type: {
+                type: String,
+            },
+            category: {
+                type: String,
+            },
+            power: {
+                type: String,
+            },
+            accuracy: {
+                type: String,
+            },
+            pp: {
+                type: String,
+            },
+            description: {
+                type: String,
             },
             learnMethod: {
-                type: String
+                type: String,
             },
             learnAt: {
-                type: Number
+                type: Number,
             }
         }
     },
     pokemon: {
-        type: String,
+        type: Object,
         required: true
     },
     generation: {
