@@ -1,18 +1,21 @@
 import getMovesets from "../../api/moveset/getMovesets.js";
 import deleteMoveset from "../../api/moveset/deleteMoveset.js";
-import page from "//unpkg.com/page/page.mjs";
 
 const renderMovesets = (movesets)=>{
     movesets.forEach(moveset => {
         const emptyMessage = "No move saved."
+        const pokemonName = moveset.pokemon.name.charAt(0).toUpperCase() + moveset.pokemon.name.slice(1);
         $('#contentContainer').append(/*template*/`
-            <div class="col-12 saved-moveset-box mb-3" id=${moveset._id}>
-                <div class="saved-moveset-title p-1">
-                    ${moveset.name} for Generation ${moveset.generation}
+            <div class="col-12 saved-moveset-title mt-2" id=${moveset._id}>
+                <div class="p-1">
+                    <i class="fas fa-chevron-circle-down movebox-show" title="Show moveset" id="show${moveset._id}"></i>
+                    ${moveset.name} <i>for ${pokemonName} in Generation ${moveset.generation}</i>
                     <i class="fas fa-trash movebox-delete" title="Delete moveset" id="delete${moveset._id}"></i>
                 </div>
-                <div class="row">
-                    <div style="width: 15%; margin: 4px 4px 4px 20px">
+            </div>
+            <div class="col-12 saved-moveset-box" style="display: none;" id="content${moveset._id}">
+                <div class="row" style="margin:0">
+                    <div style="width: 15.4%; margin: 4px">
                         <img class="pokemon-sprite-moveset" src=${moveset.pokemon.spriteURL}>
                         <div class="pokemon-info-box pb-2">
                             <div class="pokemon-name-moveset">${moveset.pokemon.name}</div>
@@ -40,7 +43,7 @@ const renderMovesets = (movesets)=>{
                             <span class="empty-move">${emptyMessage}</span>
                         </div>
                     </div>
-                    <div class="moveset-column" style="margin: 4px 20px 4px 4px">
+                    <div class="moveset-column" style="margin: 4px">
                         <div class="moveset-card" style="margin-bottom: 4px" id="2${moveset._id}">
                             <span class="empty-move">${emptyMessage}</span>
                         </div>
@@ -53,7 +56,7 @@ const renderMovesets = (movesets)=>{
         `);
 
         moveset.pokemon.type.forEach(type =>{
-            $(`#${moveset._id} .pokemon-info-box`).append(/*template*/`
+            $(`#content${moveset._id} .pokemon-info-box`).append(/*template*/`
                 <span class="pokemon-type pokemon-type-${type}">${type}</span>
             `);
         });
@@ -77,12 +80,37 @@ const renderMovesets = (movesets)=>{
             }
         }
 
+        $(`#show${moveset._id}`).off();
+        $(`#show${moveset._id}`).on('click',()=>{
+            $(`#content${moveset._id}`).toggle('slide',{direction: 'up'}, 500);
+            $(`#show${moveset._id}`).toggleClass('fa-chevron-circle-down');
+            $(`#show${moveset._id}`).toggleClass('fa-chevron-circle-up');
+            if ($(`#show${moveset._id}`).attr('title') === 'Show moveset'){
+                $(`#show${moveset._id}`).attr('title','Hide moveset');
+            }
+            else{
+                $(`#show${moveset._id}`).attr('title','Show moveset');
+            }
+        });
+
         $(`#delete${moveset._id}`).off();
-        $(`#delete${moveset._id}`).on('click',()=>{
-            deleteMoveset({id: moveset._id});
-            page.redirect('/movesets');
+        $(`#delete${moveset._id}`).on('click',async ()=>{
+            await deleteMoveset({id: moveset._id});
+            $(`#${moveset._id}`).hide('slow',()=>{$(`#${moveset._id}`).remove()});
+            $(`#content${moveset._id}`).hide('slow',()=>{$(`#content${moveset._id}`).remove()});
+            if ($('#contentContainer').children().length == 3){
+                setTimeout(() => {
+                    $('#contentContainer').html(/*template*/`
+                        <div class="d-flex flex-column justify-content-center align-items-center" style="height: 50vh">    
+                            <img src="../../assets/pikachu.gif">
+                            <h2 class="empty-moveset-message">No movesets found.</h2>
+                        </div>
+                    `); 
+                }, 1000);
+            }
         });
     });
+    $('#contentContainer').append('<div style="height:20px;"></div>');
 }
 
 const browseMovesets = async ()=>{
@@ -95,9 +123,11 @@ const browseMovesets = async ()=>{
         renderMovesets(browse.movesets);
     }
     else{
-        $('#contentContainer').append(/*template*/`
-            <img src="../../assets/pikachu.gif">
-            <h2 class="empty-moveset-message">${browse.msg}</h2>
+        $('#contentContainer').html(/*template*/`
+            <div class="d-flex flex-column justify-content-center align-items-center" style="height: 50vh">    
+                <img src="../../assets/pikachu.gif">
+                <h2 class="empty-moveset-message">${browse.msg}</h2>
+            </div>
         `);
     }
 }

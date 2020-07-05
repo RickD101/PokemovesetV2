@@ -304,6 +304,10 @@ ul {
     background: whitesmoke;
 }
 
+.ui-draggable {
+    cursor: pointer;
+}
+
 .card-body {
     padding: 0.75rem;
 }
@@ -413,13 +417,13 @@ ul {
     border: solid black 1px;
 }
 
-.movebox-save, .movebox-delete {
+.movebox-save, .movebox-delete, .movebox-show {
     font-size: 1.3rem;
     position: absolute;
     top: 9px;
 }
 
-.movebox-save:hover, .movebox-delete:hover {
+.movebox-save:hover, .movebox-delete:hover, .movebox-show:hover {
     color: #0EBFE9;
     cursor: pointer;
 }
@@ -432,15 +436,20 @@ ul {
     right: 7px;
 }
 
+.movebox-show {
+    left: 7px;
+}
+
 .saved-moveset-box {
     border: solid black 2px;
+    border-top: none;
     background: white;
     padding: 0;
 }
 
 .saved-moveset-title {
+    border: solid black 2px;
     background: lightgrey;
-    border-bottom: solid black 2px;
     font-weight: bold;
     font-size: 1.2rem;
 }
@@ -484,12 +493,12 @@ ul {
     }
 
     .moveset-column {
-        width: 284.5px;
+        width: 289px;
         height: 228px;
     }
 
     .moveset-card {
-        width: 284.5px;
+        width: 289px;
         height: 113.5px;
     }
 
@@ -524,7 +533,8 @@ ul {
 
     .moveset-description {
         height: 40px;
-        font-size: 0.7rem;
+        font-size: 0.65rem;
+        line-height: 1.2em;
     }
 
     .empty-move {
@@ -557,12 +567,12 @@ ul {
     }
 
     .moveset-column {
-        width: 343px;
+        width: 347px;
         height: 258px;
     }
 
     .moveset-card {
-        width: 343px;
+        width: 347px;
         height: 127px;
     }
 
@@ -590,6 +600,7 @@ ul {
     }
 
     .moveset-description {
+        font-size: 0.8rem;
         height: 52px;
     }
 

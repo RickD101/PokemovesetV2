@@ -50,7 +50,7 @@ const renderSaveList = (pokemon, movesets)=>{
         drop: function (event,ui){
             const moveboxID = $(event.target).attr('id');
             const moveIndex = $(ui.draggable).attr('index');
-            saveMove(pokemon.moves[moveIndex], moveboxID, movesets);
+            saveMove(pokemon.moves[moveIndex], moveboxID, movesets, moveIndex);
         }
     });
 }
@@ -80,7 +80,7 @@ const clearMoveset = (event, pokemon, movesets, pokemonName, emptyMessage)=>{
         drop: function (event,ui){
             const moveboxID = $(event.target).attr('id');
             const moveIndex = $(ui.draggable).attr('index');
-            saveMove(pokemon.moves[moveIndex], moveboxID, movesets);
+            saveMove(pokemon.moves[moveIndex], moveboxID, movesets, moveIndex);
         }
     });
     
@@ -171,13 +171,13 @@ const saveMoveset = async (event, pokemon, movesets)=>{
     }
 }
 
-const saveMove = (move, moveboxID, movesets)=>{
+const saveMove = (move, moveboxID, movesets, listIndex)=>{
     const movesetIndex = moveboxID.charAt(7);
     const moveIndex = moveboxID.charAt(12)-1;
     let movePresent = false;
 
     // check if move already exists in set
-    movesets['moveset'+movesetIndex].forEach((moveInSet,index) =>{
+    movesets['moveset'+movesetIndex].forEach((moveInSet) =>{
         if (move.name === moveInSet.name){
             movePresent = true;
         }
@@ -187,11 +187,11 @@ const saveMove = (move, moveboxID, movesets)=>{
     // and appended to the DOM
     if (!movePresent){
         movesets['moveset'+movesetIndex][moveIndex] = move;
-        renderSavedMove(move, moveboxID);
+        renderSavedMove(move, moveboxID, listIndex);
     }
     else{
-        $('#saved-col').popover('dispose');
         const presentMove = moveboxID.slice(0,8);
+        $(`#${presentMove}`).popover('dispose');
         $(`#${presentMove}`).popover({
             content: "Move is already in set!",
             placement: "left",
@@ -205,7 +205,7 @@ const saveMove = (move, moveboxID, movesets)=>{
     }
 }
 
-const renderSavedMove = (move, moveboxID)=>{
+const renderSavedMove = (move, moveboxID, listIndex)=>{
     $(`#${moveboxID}`).html('');
     $(`#${moveboxID}`).append(/*template*/`
         <span class="moveset-box-move-title">${move.name.replace(/-/g," ")}</span>
@@ -214,6 +214,7 @@ const renderSavedMove = (move, moveboxID)=>{
     `);
     $(`#${moveboxID}`).tooltip('dispose');
     $(`#${moveboxID}`).removeAttr('data-toggle data-html data-placement title');
+    $(`#${moveboxID}`).attr(`index`,`${listIndex}`);
     $(`#${moveboxID}`).attr({
         "data-toggle": "tooltip",
         "data-html": "true",
@@ -227,6 +228,19 @@ const renderSavedMove = (move, moveboxID)=>{
     });
     $(`#${moveboxID}`).tooltip({
         delay: {"show": 500}
+    });
+    $(`#${moveboxID}`).draggable({
+        helper: function(e){
+            return $(
+                `<div class="move-helper">
+                    <span class="move-title">${move.name.replace(/-/g," ")}</span>
+                </div>`
+            );
+        },
+        scroll: false,
+        revert: 'invalid',
+        cursorAt: {bottom: 0, left: 100},
+        zIndex: 1
     });
 }
 
