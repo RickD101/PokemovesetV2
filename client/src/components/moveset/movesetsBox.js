@@ -1,10 +1,15 @@
 import getUserStatus from "../../api/user/getUserStatus.js";
 import newMoveset from "../../api/moveset/newMoveset.js";
 
+// renders the movesets panel on the right hand panel of the search results page to the DOM
 const renderSaveList = (pokemon, movesets)=>{
+    
+    // define empty move message and Pokemon name formatting
     const emptyMessage = 'Drag and drop a move here...';
     let pokemonName = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
     pokemonName = pokemonName.replace(/-/g, " ");
+    
+    // render the basic structure of the moveset column
     for (let i=1; i<=3; i++){
         $('#saved-col').append(/*template*/`
             <div class="flex-fill moveset-box d-flex flex-column" id="moveBox${i}">
@@ -35,17 +40,19 @@ const renderSaveList = (pokemon, movesets)=>{
         `);
     }
 
+    // add event listener for the clear moveset button
     $('.movebox-delete').off();
     $('.movebox-delete').on('click', event=>{
         clearMoveset(event, pokemon, movesets, pokemonName, emptyMessage);
     });
 
+    // add event listener for the save moveset button
     $('.movebox-save').off();
     $('.movebox-save').on('click', event=>{
         saveMoveset(event, pokemon, movesets);
     });
 
-
+    // add droppable functionality for the move slots
     $('.moveset-box-move').droppable({
         drop: function (event,ui){
             const moveboxID = $(event.target).attr('id');
@@ -55,8 +62,13 @@ const renderSaveList = (pokemon, movesets)=>{
     });
 }
 
+// clears the moveset when the associated button is clicked
 const clearMoveset = (event, pokemon, movesets, pokemonName, emptyMessage)=>{
+    
+    // extract the box number from the id passed by the event object
     const boxNumber = event.target.id.charAt(6);
+    
+    // render blank moveset to the DOM
     $(`#moveBox${boxNumber} .moveset-box-movebox`).html(/*template*/`
         <div class="moveset-box-move flex-fill d-flex align-items-center justify-content-center"
         id="moveBox${boxNumber}Move1">
@@ -76,6 +88,7 @@ const clearMoveset = (event, pokemon, movesets, pokemonName, emptyMessage)=>{
         </div>
     `);
     
+    // redefine the droppable functionality of the empty move boxes
     $(`#moveBox${boxNumber} .moveset-box-movebox .moveset-box-move`).droppable({
         drop: function (event,ui){
             const moveboxID = $(event.target).attr('id');
@@ -84,23 +97,34 @@ const clearMoveset = (event, pokemon, movesets, pokemonName, emptyMessage)=>{
         }
     });
     
+    // revert to default name for the moveset
     $(`#name${boxNumber}`).val(`${pokemonName} Moveset ${boxNumber}`);
 
+    // clear the moveset object saved to memory
     movesets[`moveset${boxNumber}`] = [{},{},{},{}];
 }
 
+// saves moveset to backend when the associated button is clicked
 const saveMoveset = async (event, pokemon, movesets)=>{
+    
+    // call backend to check if user is logged in
     const userLoggedIn = await getUserStatus();
+    
+    // associate the targeted object with the moveset saved to memory
     const boxNumber = event.target.id.charAt(4);
     const moveset = movesets[`moveset${boxNumber}`];
+    
+    // initially assume that moveset is empty
     let movesetEmpty = true;
 
+    // loop through the moveset to check if moveset is occupied
     moveset.forEach(move => {
         if (move.name){
             movesetEmpty = false;
         }
     });
 
+    // if no user is logged in, user is prompted to login to save moveset
     if (!userLoggedIn.status){
         $('#loginDropButton').popover('dispose');
         $(`#loginDropButton`).popover({
@@ -114,6 +138,7 @@ const saveMoveset = async (event, pokemon, movesets)=>{
             $(`#loginDropButton`).popover('hide');
         }, 3000);
     }
+    // if user is logged in but moveset is empty, user is notified
     else if (userLoggedIn.status && movesetEmpty){
         $(`#moveBox${boxNumber}`).popover('dispose');
         $(`#moveBox${boxNumber}`).popover({
@@ -127,9 +152,12 @@ const saveMoveset = async (event, pokemon, movesets)=>{
             $(`#moveBox${boxNumber}`).popover('hide');
         }, 3000);
     }
+    // if user is logged in and moveset is occupied, the moveset is saved to the backend API
     else if (userLoggedIn.status){
+        // define the blank moveset data object to be sent
         const movesetData = {moves:{}};
 
+        // save the basic pokemon data to the object
         movesetData.name = $(`#name${boxNumber}`).val();
         movesetData.pokemon = {
             name: pokemon.name,
@@ -140,6 +168,7 @@ const saveMoveset = async (event, pokemon, movesets)=>{
         };
         movesetData.generation = pokemon.generation;
 
+        // save each occupied move
         moveset.forEach((move,index)=>{
             if (move.name){
                 movesetData.moves[`move${index}`] = {
@@ -156,6 +185,7 @@ const saveMoveset = async (event, pokemon, movesets)=>{
             }
         });
         
+        // call the backend API to save the moveset and display status message
         const response = await newMoveset(movesetData);
         $(`#moveBox${boxNumber}`).popover('dispose');
         $(`#moveBox${boxNumber}`).popover({
@@ -171,6 +201,7 @@ const saveMoveset = async (event, pokemon, movesets)=>{
     }
 }
 
+// saves dragged and dropped move to the moveset object in memory
 const saveMove = (move, moveboxID, movesets, listIndex)=>{
     const movesetIndex = moveboxID.charAt(7);
     const moveIndex = moveboxID.charAt(12)-1;
@@ -189,6 +220,7 @@ const saveMove = (move, moveboxID, movesets, listIndex)=>{
         movesets['moveset'+movesetIndex][moveIndex] = move;
         renderSavedMove(move, moveboxID, listIndex);
     }
+    // else user is prompted with a message that the move is already in the set
     else{
         const presentMove = moveboxID.slice(0,8);
         $(`#${presentMove}`).popover('dispose');
@@ -205,6 +237,7 @@ const saveMove = (move, moveboxID, movesets, listIndex)=>{
     }
 }
 
+// renders a dragged and dropped move to the DOM
 const renderSavedMove = (move, moveboxID, listIndex)=>{
     $(`#${moveboxID}`).html('');
     $(`#${moveboxID}`).append(/*template*/`
@@ -244,13 +277,17 @@ const renderSavedMove = (move, moveboxID, listIndex)=>{
     });
 }
 
+// renders the moveset box and applies associated functionality
 const movesetsBox = (pokemon)=>{
+    
+    // define a blank moveset object in memory
     const movesets = {
         moveset1: [{},{},{},{}],
         moveset2: [{},{},{},{}],
         moveset3: [{},{},{},{}]
     }
 
+    // call the function to render to DOM and apply functionality
     renderSaveList(pokemon, movesets);
 }
 

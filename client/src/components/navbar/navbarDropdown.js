@@ -5,11 +5,17 @@ import signupModal from "./signupModal.js";
 import confirmDeleteModal from "./confirmDeleteModal.js";
 import page from "//unpkg.com/page/page.mjs";
 
+// calls the backend API to attempt a user login
 const attemptLogin = async (formData)=>{
+    
+    // call the backend API
     const login = await userLogin(formData);
+    
+    // if successful, the dropdown is re-rendered with the user profile buttons
     if (login.status){
-        appendProfile();
+        appendProfile(login.username);
     }
+    // otherwise an alert is displayed with a message from the backend API
     else if (!login.status){
         $('.alert').remove();
         $('#loginButton').after(/*template*/`
@@ -21,6 +27,7 @@ const attemptLogin = async (formData)=>{
     }
 }
 
+// renders the login form structure to the navbar dropdown
 const appendLogin = ()=>{
     $('#loginDropButton').text('Login');
     $('.dropdown-menu').html(/*template*/`
@@ -41,6 +48,7 @@ const appendLogin = ()=>{
         </button>
     `);
 
+    // clears the login form fields and previous alerts whenever the dropdown is shown
     $('#navbarDropdown').off();
     $('#navbarDropdown').on('show.bs.dropdown', ()=>{
         $('.alert').remove();
@@ -48,8 +56,10 @@ const appendLogin = ()=>{
         $('#password').val('');
     });
 
+    // renders a signup modal to be shown when the user presses the sign up  utton
     signupModal();
 
+    // adds the event listener to the login form
     $('#login-form').off();
     $('#login-form').on('submit', (event)=>{
         event.preventDefault();
@@ -59,16 +69,17 @@ const appendLogin = ()=>{
             password: $('#password').val()
         };
 
+        // make the backend API call to login
         attemptLogin(formData);
     });
 }
 
-const appendProfile = async ()=>{
-    const userLoggedIn = await getUserStatus();
+// renders the user profile buttons to the dropdown
+const appendProfile = (username)=>{
     $('#loginDropButton').text('Profile');
     $('.dropdown-menu').html(/*template*/`
         <span class="dropdown-item dropdown-profile-title">
-            ${userLoggedIn.username}'s Profile
+            ${username}'s Profile
         </span>
         <div class="dropdown-divider"></div>
         <div class="profileButtonContainer">
@@ -78,23 +89,31 @@ const appendProfile = async ()=>{
         </div>
     `);
 
+    // calls the delete profile confirmation modal activated by the delete profile button
     confirmDeleteModal();
 
+    // adds logout event listener to the logout button
     $('#logout').off();
     $('#logout').on('click', async (event)=>{
         event.preventDefault();
 
+        // call the backend API then render the login dropdown and redirect to home page
         await userLogout();
         appendLogin();
         page.redirect('/search');
     });
 }
 
+
 const navbarDropdown = async ()=>{
+    // call the backend API to check user status
     const userLoggedIn = await getUserStatus();
+    
+    // if a user is logged in, render the profile buttons to the dropdown
     if (userLoggedIn.status){
-        appendProfile();
+        appendProfile(userLoggedIn.username);
     }
+    // else render the login form to the dropdown
     else if (!userLoggedIn.status){
         appendLogin();
     }

@@ -11,14 +11,18 @@ import browseMovesets from "./components/moveset/browseMovesets.js";
 // page routes function
 const showPages = ()=>{
 
+    // redirect to search route from base directory
     page('/', ()=>{
         page.redirect('/search');
     });
 
+    // search page route
     page('/search', navbar, searchBar);
 
+    // search results route
     page('/searchResults', navbar, searchResults);
 
+    // saved movesets route
     page('/movesets', navbar, browseMovesets);
 
     page({hashbang: true});

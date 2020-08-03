@@ -95,7 +95,8 @@ router.post('/login', async (req,res)=>{
             };
             res.send({
                 status: true,
-                msg: savedUser.username + ' logged in.'
+                msg: savedUser.username + ' logged in.',
+                username: savedUser.username
             });
         }
         else{

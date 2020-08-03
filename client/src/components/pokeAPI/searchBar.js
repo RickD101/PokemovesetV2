@@ -2,12 +2,20 @@ import searchPokemon from "../../api/pokeAPI/searchPokemon.js";
 import { pokemonNames } from "../../consts.js";
 import page from "//unpkg.com/page/page.mjs";
 
+// calls the backend API to search for pokemon (via external API)
 const attemptSearch = async (pokemonData)=>{
+    
+    // remove event listeners for search bar while search is being performed
+    // to prevent multiple search submissions
     $('#searchForm').off();
     $('#searchForm').on('submit', (event)=>{event.preventDefault()});
+    
+    // call the backend API and render a loading spinner while waiting
     $('#searchBar').addClass('loadinggif');
     const search = await searchPokemon(pokemonData);
     $('#searchBar').removeClass('loadinggif');
+    
+    // if search is successful, save the returned pokemon data to session storage
     if (search.status){
         sessionStorage.setItem('pokemon', JSON.stringify(search.pokemon));
         page.redirect('/searchResults');

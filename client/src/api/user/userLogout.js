@@ -1,3 +1,4 @@
+// user logout backend API call
 const userLogout = async ()=>{
     try{
         const response = await fetch('/api/user/logout', {

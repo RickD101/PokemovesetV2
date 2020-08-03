@@ -1,6 +1,7 @@
 import page from "//unpkg.com/page/page.mjs";
 import deleteUser from "../../api/user/deleteUser.js";
 
+// renders a modal to the DOM prompting the user to confirm their intention to delete their profile
 const confirmDeleteModal = async ()=>{
     $('#confirmDeleteModal').remove();
     $('body').append(/*template*/`
@@ -25,10 +26,12 @@ const confirmDeleteModal = async ()=>{
         </div>
     `);
 
+    // add event listener for the delete button within the modal
     $('#confirmDeleteButton').off();
     $('#confirmDeleteButton').on('click', async (event)=>{
         event.preventDefault();
 
+        // make backend API call to delete user profile then hide the modal and redirect to the search page
         await deleteUser();
         $('#confirmDeleteModal').modal('hide');
         page.redirect('/search');

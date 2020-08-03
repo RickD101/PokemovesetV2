@@ -1,3 +1,4 @@
+// get user status backend API call
 const getUserStatus = async ()=>{
     try{
         const response = await fetch('/api/user/', {

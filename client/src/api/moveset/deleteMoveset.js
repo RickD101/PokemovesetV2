@@ -1,3 +1,4 @@
+// delete moveset backend API call
 const deleteMoveset = async (req)=>{
     try{
         const response = await fetch('/api/movesets/delete', {

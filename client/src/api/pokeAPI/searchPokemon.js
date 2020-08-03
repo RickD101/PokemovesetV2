@@ -1,3 +1,4 @@
+// search pokemon backend API call (makes external API call on backend route)
 const searchPokemon = async (req)=>{
     try{
         const response = await fetch('/api/pokeAPI', {

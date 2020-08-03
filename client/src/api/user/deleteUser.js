@@ -1,3 +1,4 @@
+// delete user backend API call
 const deleteUser = async ()=>{
     try{
         const response = await fetch('/api/user/delete', {

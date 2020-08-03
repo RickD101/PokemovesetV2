@@ -1,5 +1,6 @@
 import navbarDropdown from "./navbarDropdown.js";
 
+// renders the navbar to the DOM
 const navbar = (ctx, next)=>{
     $('.fixed-top').children().remove();
     $('.fixed-top').append(/*template*/`
@@ -31,6 +32,7 @@ const navbar = (ctx, next)=>{
         </nav>
     `);
 
+    // calls function to render the dropdown controlling the user profile functionality
     navbarDropdown();
 
     next();

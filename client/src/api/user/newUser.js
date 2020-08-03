@@ -1,3 +1,4 @@
+// create new user backend API call
 const newUser = async (req)=>{
     try{
         const response = await fetch('/api/user/new', {

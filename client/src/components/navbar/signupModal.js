@@ -1,11 +1,16 @@
 import newUser from "../../api/user/newUser.js";
 
+// calls the backend API to create a new user
 const attemptSignup = async (formData)=>{
+
+    // first check the password and confirmation match
     if (formData.password1 === formData.password2){
+        // call the backend API
         const signup = await newUser({
             username: formData.username,
             password: formData.password1
         });
+        // if successful, render an alert to the DOM notifying user
         if (signup.status){
             $('.alert').remove();
             $('#signupButton').after(/*template*/`
@@ -18,6 +23,7 @@ const attemptSignup = async (formData)=>{
             $('#signupPassword1').val('');
             $('#signupPassword2').val('');
         }
+        // else render an error alert to the DOM with the returned backend API message
         else if (!signup.status){
             $('.alert').remove();
             $('#signupButton').after(/*template*/`
@@ -28,6 +34,7 @@ const attemptSignup = async (formData)=>{
             `);
         }
     }
+    // if the passwords do not match, render an alert to the DOM notifying the user
     else if (formData.password1 !== formData.password2){
         $('.alert').remove();
         $('#signupButton').after(/*template*/`
@@ -39,6 +46,7 @@ const attemptSignup = async (formData)=>{
     }
 }
 
+// renders the signup modal to the DOM
 const signupModal = ()=>{
     $('#signupModal').remove();
     $('body').append(/*template*/`
@@ -74,6 +82,7 @@ const signupModal = ()=>{
     </div>
     `);
 
+    // add an event listener to the signup form
     $('#signup-form').off();
     $('#signup-form').on('submit', (event)=>{
         event.preventDefault();
@@ -84,9 +93,11 @@ const signupModal = ()=>{
             password2: $('#signupPassword2').val()
         };
 
+        // call the function to attempt signup
         attemptSignup(formData);
     });
 
+    // add listener to clear the signup form when the modal is hidden
     $('#signupModal').on('hidden.bs.modal', ()=>{
         $('.alert').remove();
         $('#signupUsername').val('');

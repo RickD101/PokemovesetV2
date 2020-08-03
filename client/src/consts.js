@@ -1,3 +1,4 @@
+// pokemon names array used for autocomplete functionality
 const pokemonNames = [
 	"Bulbasaur",
 	"Ivysaur",

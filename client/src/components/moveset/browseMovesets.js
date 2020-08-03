@@ -1,10 +1,16 @@
 import getMovesets from "../../api/moveset/getMovesets.js";
 import deleteMoveset from "../../api/moveset/deleteMoveset.js";
 
+// renders saved movesets and associated pokemon data to the DOM
 const renderMovesets = (movesets)=>{
     movesets.forEach(moveset => {
+        
+        // define empty move message and Pokemon name formatting
         const emptyMessage = "No move saved."
-        const pokemonName = moveset.pokemon.name.charAt(0).toUpperCase() + moveset.pokemon.name.slice(1);
+        let pokemonName = moveset.pokemon.name.charAt(0).toUpperCase() + moveset.pokemon.name.slice(1);
+        pokemonName = pokemonName.replace(/-/g, " ");
+        
+        // render basic moveset and pokemon info structure
         $('#contentContainer').append(/*template*/`
             <div class="col-12 saved-moveset-title mt-2" id=${moveset._id}>
                 <div class="p-1">
@@ -55,12 +61,14 @@ const renderMovesets = (movesets)=>{
             </div>
         `);
 
+        // render the pokemon type(s)
         moveset.pokemon.type.forEach(type =>{
             $(`#content${moveset._id} .pokemon-info-box`).append(/*template*/`
                 <span class="pokemon-type pokemon-type-${type}">${type}</span>
             `);
         });
 
+        // render the move info
         for (let i=0; i<4; i++){
             const move = moveset.moves[`move${i}`];
             if (move){
@@ -80,6 +88,7 @@ const renderMovesets = (movesets)=>{
             }
         }
 
+        // add event listener for the show/hide moveset button
         $(`#show${moveset._id}`).off();
         $(`#show${moveset._id}`).on('click',()=>{
             $(`#content${moveset._id}`).toggle('slide',{direction: 'up'}, 500);
@@ -93,6 +102,7 @@ const renderMovesets = (movesets)=>{
             }
         });
 
+        // add event listener for the delete moveset button
         $(`#delete${moveset._id}`).off();
         $(`#delete${moveset._id}`).on('click',async ()=>{
             await deleteMoveset({id: moveset._id});
@@ -114,14 +124,18 @@ const renderMovesets = (movesets)=>{
 }
 
 const browseMovesets = async ()=>{
+    // remove previously rendered DOM and artefacts
     $('.popover').remove();
     $('#contentContainer').children().remove();
 
+    // make backend API call to retrieve saved movesets
     const browse = await getMovesets();
     
+    // if movesets are present call the render function above
     if (browse.status){
         renderMovesets(browse.movesets);
     }
+    // else if no movesets are saved render a placeholder page
     else{
         $('#contentContainer').html(/*template*/`
             <div class="d-flex flex-column justify-content-center align-items-center" style="height: 50vh">    
