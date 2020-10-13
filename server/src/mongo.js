@@ -1,11 +1,35 @@
+// inclusions
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/Pokemoveset', 
-{useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
+const consts  = require('./consts');
 
-const db = mongoose.connection;
+let uri;
+let db;
+if (consts.environment === 'production') {
+    uri = consts.dbProd;
+    db = 'Pokemoveset';
+}
+else {
+    uri = `${consts.dbPath}${consts.dbName}`;
+    db = consts.dbName;
+}
 
-db.on('error', console.error.bind(console, 'connection error'));
-db.once('open', function() {
-    //we're connected!
-    console.log("Database online");
+mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false
 });
+
+mongoose.connection.on('connected', () => {
+    console.log(`Mongoose connected to ${db}`)
+});
+  
+mongoose.connection.on('error', (err) => {
+    console.log('Mongoose failed to connect', err)
+});
+
+mongoose.connection.on('disconncted', () => {
+    console.log('Mongoose disconnected')
+});
+
+module.exports = mongoose;
