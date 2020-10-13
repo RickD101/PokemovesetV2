@@ -25,7 +25,7 @@ app.use(cors());
 // middleware
 app.use(express.json());        // middleware for JSON parsing     
 app.use(session({               // session middleware
-    secret: "justshootme",
+    secret: consts.key,
     resave: false,
     saveUninitialized: false 
 }));
